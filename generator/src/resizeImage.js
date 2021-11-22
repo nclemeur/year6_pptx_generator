@@ -14,6 +14,13 @@ export const resizeImg = async (path, height, metadata ) => {
 
     return s.png()
         .resize( { height: 400, width } )
+        .extend({
+            top: 10,
+            bottom: 10,
+            left: 10,
+            right: 10,
+            background: { r: 255, g: 255, b: 255, alpha: 1 }
+          })
         .toBuffer();
         
 };

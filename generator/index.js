@@ -3,6 +3,7 @@ import { extname, basename } from "path";
 import pptxgen from "pptxgenjs";
 
 import config from "./src/config.js";
+import { createMasterSlide } from "./src/createMasterSlide.js";
 import { createSlide } from "./src/createSlide.js";
 
 
@@ -21,6 +22,10 @@ const images = ['65H Campbell, Calum.jpg', '65H Clavera Agard, Amelia.jpg', '65H
 
 if(genPptx){
     const pres = new pptxgen();
+
+    createMasterSlide(pres);
+
+
 
     for (const imageName of images) {    
         await createSlide(imageName, pres);

@@ -1,0 +1,14 @@
+{
+  "name": "year6_pptx_generator",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "pptxgenjs": "^3.8.0",
+    "sharp": "^0.29.3"
+  }
+}

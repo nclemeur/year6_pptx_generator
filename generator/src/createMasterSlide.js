@@ -6,7 +6,7 @@ export function createMasterSlide(pptx) {
 
     pptx.defineSlideMaster({
         title: "MASTER_SLIDE",
-        background : { color: "0b0b61" }, // Solid color
+        //background : { color: "0b0b61" }, // Solid color
         objects: [
             
             {
@@ -17,7 +17,9 @@ export function createMasterSlide(pptx) {
                         w: 8,
                         y: 0.125, 
                         h: 0.75,
-                        color: "FFFFFF", fill: { color: "0000FF" }, valign: "middle", align: "center", 
+                        //color: "FFFFFF", 
+                        //fill: { color: "0000FF" }, 
+                        valign: "middle", align: "center", 
                         isTextBox: true, autoFit: true,
                         fontFace: 'Segoe Script',
                         fontSize: 32,

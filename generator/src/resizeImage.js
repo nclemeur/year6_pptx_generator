@@ -1,5 +1,5 @@
 import sharp  from "sharp";
-
+import config from "./config.js";
 
 export const resizeImg = async (path, height, metadata ) => {    
     const s = sharp(path);
@@ -13,12 +13,12 @@ export const resizeImg = async (path, height, metadata ) => {
     metadata.resized_width = width;
 
     return s.png()
-        .resize( { height: 400, width } )
+        .resize( { height, width } )
         .extend({
-            top: 10,
-            bottom: 10,
-            left: 10,
-            right: 10,
+            top: config.IMAGE_BORDER,
+            bottom: config.IMAGE_BORDER,
+            left: config.IMAGE_BORDER,
+            right: config.IMAGE_BORDER,
             background: { r: 255, g: 255, b: 255, alpha: 1 }
           })
         .toBuffer();

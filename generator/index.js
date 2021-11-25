@@ -27,13 +27,14 @@ const years = ['6A', '6B', '6C', '6D', '6E', '6F', '6G', '65H'];
 
 
 for(const year of years){
-    //if(year!=='6C'){
+    //if(year!=='65H'){
     //    continue;
     //}
     console.log(`Creating presentation for year ${year}`);
     let nbrSlides = 0;
     const pres = new pptxgen();
-    //pres.layout = 'LAYOUT_4x3';
+    pres.defineLayout({ name:'LAYOUT_A4', width:11.7, height:8.25 });
+    pres.layout = config.LAYOUT;
     createMasterSlide(pres);
     for(const fileInfo of allFilesInfos){
         if(year!==fileInfo.year){

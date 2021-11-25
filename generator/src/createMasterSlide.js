@@ -13,15 +13,12 @@ export function createMasterSlide(pptx) {
                 placeholder: {
                     options: {
                         name: "name_placeholder", type: "body",
-                        x: 1, 
-                        w: 8,
-                        y: 0.125, 
-                        h: 0.75,
+                        ...config.PPTX_NAME_POSITION,
                         //color: "FFFFFF", 
                         //fill: { color: "0000FF" }, 
                         valign: "middle", align: "center", 
                         isTextBox: true, autoFit: true,
-                        fontFace: 'Segoe Script',
+                        fontFace: config.FONT_FACE,
                         fontSize: 32,
                         text: "(add name here)",
                     },

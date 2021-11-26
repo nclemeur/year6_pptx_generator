@@ -15,21 +15,21 @@ const jpgFiles = allFiles.filter(function (file) {
     return ext === ".jpg" || ext === ".jpeg";
   });
 
+
 const allFilesInfos = []; 
 jpgFiles.forEach(f => {
     allFilesInfos.push(extractNamesInfo(basename(f)));
 });
+allFilesInfos.sort((a,b) => a.key.localeCompare(b.key));
 checkMissing(allFilesInfos);
 
 const genPptx = true;
 const years = ['6A', '6B', '6C', '6D', '6E', '6F', '6G', '65H'];
 
-
-
 for(const year of years){
-    //if(year!=='65H'){
-    //    continue;
-    //}
+    if(year!=='65H'){
+        continue;
+    }
     console.log(`Creating presentation for year ${year}`);
     let nbrSlides = 0;
     const pres = new pptxgen();
@@ -45,7 +45,7 @@ for(const year of years){
             await createSlide(allFilesInfos, fileInfo, pres);
         }
     }       
-    pres.writeFile({ fileName: `..\\..\\Testing_${year}.pptx` }, { compression: false});
+    pres.writeFile({ fileName: `..\\..\\${config.FILENAME_PREFIX}_${year}.pptx` }, { compression: true});
     console.log(`Creating presentation for year ${year}...Done, ${nbrSlides} slides generated.`);
 }
     

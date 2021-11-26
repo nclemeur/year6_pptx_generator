@@ -10,7 +10,7 @@ export const extractNamesInfo =  (imgwithExt) => {
 
     const year = leftParts[0].trim().toUpperCase();
     const surname = leftParts.slice(1).join(' ').trim();    
-    const firstname = rightParts[0].trim();
+    let firstname = rightParts[0].trim();
 
     let foundDash = false;
     let foundP = false;
@@ -22,6 +22,9 @@ export const extractNamesInfo =  (imgwithExt) => {
         if(el.toUpperCase()==='P'){
             foundP = true;
         }
+        if(!foundP && foundDash && el.trim().length > 0){
+            firstname += ' ' + el.trim();
+        }
     });
     let isPrep = false;
     if(foundDash && foundP){
@@ -30,6 +33,7 @@ export const extractNamesInfo =  (imgwithExt) => {
         console.warn(imgwithExt + " maybe prep image?")
     }
     
+    const key = (year.toLowerCase()+'_'+surname.trim().toLowerCase() + '_' + firstname.trim().toLowerCase()).replaceAll(/\W/g, '');
 
     return {
         img: imgwithExt,

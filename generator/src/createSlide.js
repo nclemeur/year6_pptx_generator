@@ -13,12 +13,19 @@ export async function createSlide(allFilesInfo, fileInfo, pptx) {
     const img = imgName; //jpgFiles[0];
     const path = photosFolder + '\\' + img;
 
-    let imgData = {};    
-    let metadata = {};
+    let imgData = {};
 
     const height = config.IMAGE_RESIZE_HEIGHT;
+    const width = config.IMAGE_RESIZE_HEIGHT;
 
-    await resizeImg(path, height, metadata).then( data =>  imgData.img = data)
+    let metadata = {};
+    await resizeImg(path, metadata).then(({ data, info }) => {         
+        imgData.img = data;
+        imgData.resized_width = info.width;
+        imgData.resized_height = info.height;
+    });
+
+    
 
     const pptxHeight = config.PPTX_IMAGE_HEIGHT;
     const pptxRatio = pptxHeight/height;
@@ -34,17 +41,41 @@ export async function createSlide(allFilesInfo, fileInfo, pptx) {
         const prepImg = prepInfo.img;
         const prepPath = photosFolder + '\\' + prepImg;
         let prepMetadata = {};
-        await resizeImg(prepPath, height, prepMetadata).then( data =>  imgData.prepImg = data);
-        const width = prepMetadata.resized_width * pptxRatio;
+        await resizeImg(prepPath, prepMetadata).then(({data, info}) => {             
+            imgData.prepImg = data;
+            imgData.prep_resized_width = info.width;
+            imgData.prep_resized_height = info.height;
+        });
+
+        const prepResizedPptxWidth = imgData.prep_resized_width * pptxRatio;
+        const prepResizedPptxHeight = imgData.prep_resized_height * pptxRatio;
+   
+        //console.log(`prep: ${prepResizedPptxWidth} x ${prepResizedPptxHeight}`);
+
+        let prepPlaceholderCfg = {};
+        if(config.USE_PLACE_HOLDER_FOR_IMAGES){
+            prepPlaceholderCfg = { placeholder: 'prep_image_placeholder' }
+        };
         slide.addImage( { data: 'data:image/png;base64,' + imgData.prepImg.toString('base64'), type: 'contain',
-        //placeholder: 'image_placeholder1',
-        x: ( center1 - width /2), y: config.PPTX_IMAGE_VERTICAL_OFFSET, h: pptxHeight, w: width, altText: prepImg});    
+        ...prepPlaceholderCfg,
+        x: ( center1 - prepResizedPptxWidth /2), 
+        y: config.PPTX_IMAGE_VERTICAL_OFFSET, 
+        h: prepResizedPptxHeight, w: prepResizedPptxWidth, 
+        altText: prepImg});    
     }    
     
-    const width2 = metadata.resized_width * pptxRatio;
+    const resizedPptxWidth = imgData.resized_width * pptxRatio;
+    const resizedPptxHeight = imgData.resized_height * pptxRatio;
+
+    let placeholderCfg = {};
+    if(config.USE_PLACE_HOLDER_FOR_IMAGES){
+        placeholderCfg = { placeholder: 'image_placeholder' }
+    };
+
+    //console.log(`y6: ${resizedPptxWidth} x ${resizedPptxHeight}`);
     slide.addImage( { data: 'data:image/png;base64,' + imgData.img.toString('base64'), type: 'contain',
-    //placeholder: 'image_placeholder2',
-    x: ( center2 - width2 /2), y: config.PPTX_IMAGE_VERTICAL_OFFSET, h: pptxHeight, w: width2,  altText: img});    
+    ...placeholderCfg,
+    x: ( center2 - resizedPptxWidth /2), y: config.PPTX_IMAGE_VERTICAL_OFFSET, h: resizedPptxHeight, w: resizedPptxWidth,  altText: img});    
 
     slide.addText(fileInfo.firstname + ' ' + fileInfo.surname, { placeholder: "name_placeholder" });
 

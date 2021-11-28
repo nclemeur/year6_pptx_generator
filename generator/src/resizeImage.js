@@ -51,7 +51,7 @@ export const resizeImg = async (path, metadata ) => {
         } 
         
         let transparentPaddingColor = { r: 255, g: 255, b: 255, alpha: 0 };
-        if(true){
+        if(false){//to debug
             transparentPaddingColor = { r: 255, g: 0, b: 0, alpha: 1 };
         }
 

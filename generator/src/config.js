@@ -19,7 +19,7 @@ const LAYOUT_16x9 = {
     PHOTOS_FOLDER : testing ? TEST_PHOTO_FOLDER: USB_TEST_PHOTO,
     FONT_FACE: 'Segoe Script',
     FONT_SIZE: 32,
-    TEXT_COLOR: '#FFFFF',
+    TEXT_COLOR: '#000000',
     IMAGE_DENSITY: 96,
     PPTX_NAME_POSITION: { x: 1, w: 8, y: 0.125, h: 0.75,},
     USE_PLACE_HOLDER_FOR_IMAGES: true
@@ -47,4 +47,4 @@ const LAYOUT_A4 = {
 }
 
 
-export default LAYOUT_A4;
+export default LAYOUT_16x9;

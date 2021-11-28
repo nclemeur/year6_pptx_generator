@@ -3,7 +3,7 @@
 import mainPptx  from "./mainPptx.js";
 import mainPdfLabels from "./mainPdfLabels.js";
 
-const pptx = false;
+const pptx = true;
 
 if(pptx){
     await mainPptx();

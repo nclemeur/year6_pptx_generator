@@ -23,6 +23,8 @@ jpgFiles.forEach(f => {
 allFilesInfos.sort((a,b) => a.key.localeCompare(b.key));
 checkMissing(allFilesInfos);
 
+//console.log(allFilesInfos);
+
 const genPptx = true;
 const years = ['6A', '6B', '6C', '6D', '6E', '6F', '6G', '65H'];
 

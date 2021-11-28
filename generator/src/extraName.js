@@ -22,7 +22,7 @@ export const extractNamesInfo =  (imgwithExt) => {
         if(el.toUpperCase()==='P'){
             foundP = true;
         }
-        if(!foundP && foundDash && el.trim().length > 0){
+        if(!foundP && !foundDash && el.trim().length > 0){
             firstname += ' ' + el.trim();
         }
     });

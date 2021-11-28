@@ -26,7 +26,12 @@ export function createMasterSlide(pptx) {
         const centeringFactor = config.IMAGE_CENTERING_FACTOR;
     
         const center1 = slideTotalWidth / centeringFactor;
-        const center2 = (centeringFactor - 1.0)*slideTotalWidth / centeringFactor;   
+        const center2 = (centeringFactor - 1.0)*slideTotalWidth / centeringFactor;
+        const borderPptx = config.IMAGE_BORDER * (config.PPTX_IMAGE_HEIGHT / config.IMAGE_RESIZE_HEIGHT);
+        const totalWidth = config.PPTX_IMAGE_WIDTH + 2*borderPptx;
+        const totalHeight = config.PPTX_IMAGE_HEIGHT + 2*borderPptx;
+
+        //console.log(`Place holder image: ${totalWidth} x ${totalHeight}`);
 
         objects.push(        
         {
@@ -34,9 +39,9 @@ export function createMasterSlide(pptx) {
                 options: {
                     name: 'prep_image_placeholder', type: 'image',
                     y: config.PPTX_IMAGE_VERTICAL_OFFSET,
-                    h: config.PPTX_IMAGE_HEIGHT,
-                    w: config.PPTX_IMAGE_WIDTH, 
-                    x: ( center1 - config.PPTX_IMAGE_WIDTH /2), 
+                    h: totalHeight,
+                    w: totalWidth, 
+                    x: ( center1 - totalWidth /2), 
                 }
             }
         },
@@ -45,9 +50,9 @@ export function createMasterSlide(pptx) {
                 options: {
                     name: 'image_placeholder', type: 'image',
                     y: config.PPTX_IMAGE_VERTICAL_OFFSET,
-                    h: config.PPTX_IMAGE_HEIGHT,
-                    w: config.PPTX_IMAGE_WIDTH,
-                    x: ( center2 - config.PPTX_IMAGE_WIDTH /2), 
+                    h: totalHeight,
+                    w: totalWidth, 
+                    x: ( center2 - totalWidth /2), 
                 }
             }
         });

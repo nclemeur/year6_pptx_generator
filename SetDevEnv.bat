@@ -1,8 +1,4 @@
-set NODE_VERSION=v16.13.0
 set WORKSPACE_HOME=%cd%
-set TOOLS_HOME=%WORKSPACE_HOME%\..\tools
+set TOOLS_HOME=%WORKSPACE_HOME%\tools
 
-set PATH=%JAVA_HOME%\bin;%TOOLS_HOME%\node\node-%NODE_VERSION%-win-x64;%PATH%
-
-
-
+@call %DAE_DEV_TOOLS_HOME%\SetDaeDevEnv.bat

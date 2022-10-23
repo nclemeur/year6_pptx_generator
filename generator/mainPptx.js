@@ -6,52 +6,58 @@ import config from "./src/config.js";
 import { createMasterSlide } from "./src/createMasterSlide.js";
 import { createSlide } from "./src/createSlide.js";
 import { checkMissing, extractNamesInfo } from "./src/extraName.js";
+import loadStudents from "./src/loadStudents.js";
 
 export default async () => {
+  const genPptx = false;
 
-const allFiles = readdirSync(config.PHOTOS_FOLDER);
-const jpgFiles = allFiles.filter(function (file) {
+  const years = ["6A", "6B", "6C", "6D", "6E", "6F", "6G"];
+  //const years = ["6D"];
+  const byYearInfo = await loadStudents(years);
+
+  if (!genPptx) {
+    return;
+  }
+
+  const allFiles = readdirSync(config.PHOTOS_FOLDER);
+  const jpgFiles = allFiles.filter(function (file) {
     const ext = extname(file).toLowerCase();
     return ext === ".jpg" || ext === ".jpeg";
   });
-
-
-const allFilesInfos = []; 
-jpgFiles.forEach(f => {
+  const allFilesInfos = [];
+  jpgFiles.forEach((f) => {
     allFilesInfos.push(extractNamesInfo(basename(f)));
-});
-allFilesInfos.sort((a,b) => a.key.localeCompare(b.key));
-checkMissing(allFilesInfos);
+  });
+  allFilesInfos.sort((a, b) => a.key.localeCompare(b.key));
+  checkMissing(allFilesInfos);
 
-//console.log(allFilesInfos);
+  //console.log(allFilesInfos);
 
-const genPptx = true;
-const years = ['6A', '6B', '6C', '6D', '6E', '6F', '6G', '65H'];
-
-for(const year of years){
-    if(year!=='65H'){
-        continue;
+  for (const year of years) {
+    if (year !== "65H") {
+      continue;
     }
     console.log(`Creating presentation for year ${year}`);
     let nbrSlides = 0;
     const pres = new pptxgen();
-    pres.defineLayout({ name:'LAYOUT_A4', width:11.7, height:8.25 });
+    pres.defineLayout({ name: "LAYOUT_A4", width: 11.7, height: 8.25 });
     pres.layout = config.LAYOUT;
     createMasterSlide(pres);
-    for(const fileInfo of allFilesInfos){
-        if(year!==fileInfo.year){
-            continue;
-        }
-        if(!fileInfo.prep){
-            nbrSlides++;
-            await createSlide(allFilesInfos, fileInfo, pres);
-        }
-    }       
-    pres.writeFile({ fileName: `..\\..\\${config.FILENAME_PREFIX}_${year}.pptx` }, { compression: true});
-    console.log(`Creating presentation for year ${year}...Done, ${nbrSlides} slides generated.`);
-}
-    
-}
-    
-    
-
+    for (const fileInfo of allFilesInfos) {
+      if (year !== fileInfo.year) {
+        continue;
+      }
+      if (!fileInfo.prep) {
+        nbrSlides++;
+        await createSlide(allFilesInfos, fileInfo, pres);
+      }
+    }
+    pres.writeFile(
+      { fileName: `..\\..\\${config.FILENAME_PREFIX}_${year}.pptx` },
+      { compression: true }
+    );
+    console.log(
+      `Creating presentation for year ${year}...Done, ${nbrSlides} slides generated.`
+    );
+  }
+};

@@ -6,24 +6,14 @@ import config from "./src/config.js";
 import { createMasterSlide } from "./src/createMasterSlide.js";
 import { createSlide } from "./src/createSlide.js";
 import { checkMissing, extractNamesInfo } from "./src/extraName.js";
-import loadStudents from "./src/loadStudents.js";
 
 export default async () => {
-  const genPptx = false;
-
-  const years = ["6A", "6B", "6C", "6D", "6E", "6F", "6G"];
-  //const years = ["6D"];
-  const byYearInfo = await loadStudents(years);
-
-  if (!genPptx) {
-    return;
-  }
-
   const allFiles = readdirSync(config.PHOTOS_FOLDER);
   const jpgFiles = allFiles.filter(function (file) {
     const ext = extname(file).toLowerCase();
     return ext === ".jpg" || ext === ".jpeg";
   });
+
   const allFilesInfos = [];
   jpgFiles.forEach((f) => {
     allFilesInfos.push(extractNamesInfo(basename(f)));
@@ -32,6 +22,9 @@ export default async () => {
   checkMissing(allFilesInfos);
 
   //console.log(allFilesInfos);
+
+  const genPptx = true;
+  const years = ["6A", "6B", "6C", "6D", "6E", "6F", "6G", "65H"];
 
   for (const year of years) {
     if (year !== "65H") {

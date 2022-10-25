@@ -26,6 +26,8 @@ export default async function loadStudents(classes) {
     "====== Missing prep photos: " + allPrepMissing.length + " ===== "
   );
   allPrepMissing.forEach((s) => console.log(s));
+
+  return ctxByClass;
 }
 
 async function readClass(cl) {
@@ -79,26 +81,33 @@ function extractStudentInfo(ctx, str, cl) {
   info.lastName = nameParts[0].trim();
   info.firstName = nameParts[1].trim();
 
-  const path = cl + "\\" + info.lastName + ", " + info.firstName + ".jpg";
+  const fileName = info.lastName + ", " + info.firstName + ".jpg";
+
+  const path = cl + "\\" + fileName;
 
   const year6Path = LAYOUT.PHOTOS_FOLDER + path;
 
   if (fs.existsSync(year6Path)) {
+    info.year6Name = fileName;
     info.year6Path = year6Path;
   } else {
     ctx.missing_year6.push(info.lastName + ", " + info.firstName + " " + cl);
   }
 
   let prepExistings = [];
+  let prepFileNameExisting = [];
   PREP_PHOTOS_FOLDER.forEach((f) => {
-    const prepPath = f + info.lastName + ", " + info.firstName + " - P.jpg";
+    const prepFileName = info.lastName + ", " + info.firstName + " - P.jpg";
+    const prepPath = f + prepFileName;
     if (fs.existsSync(prepPath)) {
       prepExistings.push(prepPath);
+      prepFileNameExisting.push(prepFileName);
     }
   });
 
   if (prepExistings.length === 1) {
     info.prepPath = prepExistings[0];
+    info.prepFileName = prepFileNameExisting[0];
   } else if (prepExistings.length > 1) {
     console.warn(
       "Multiple prep photo for " +

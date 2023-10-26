@@ -9,7 +9,8 @@
   "license": "MIT",
   "dependencies": {
     "pdfkit": "^0.13.0",
-    "pptxgenjs": "^3.8.0",
-    "sharp": "^0.29.3"
-  }
+    "pptxgenjs": "^3.12.0",
+    "sharp": "^0.32.6"
+  },
+  "packageManager": "yarn@3.6.4"
 }

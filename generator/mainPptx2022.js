@@ -2,7 +2,7 @@ import { readdirSync } from "fs";
 import { basename, extname } from "path";
 import pptxgen from "pptxgenjs";
 
-import config from "./src/config.js";
+import config from "./src/config_2022.js";
 import { createMasterSlide } from "./src/createMasterSlide.js";
 import { createSlide2022 } from "./src/createSlide2022.js";
 import { checkMissing, extractNamesInfo } from "./src/extraName.js";

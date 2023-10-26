@@ -1,8 +1,8 @@
 import readline from "readline";
 import events from "events";
 import fs from "fs";
-import { CLASS_LISTS_FOLDER, PREP_PHOTOS_FOLDER } from "./config.js";
-import LAYOUT from "./config.js";
+import { CLASS_LISTS_FOLDER, PREP_PHOTOS_FOLDER } from "./config_2022.js";
+import LAYOUT from "./config_2022.js";
 
 export default async function loadStudents(classes) {
   const ctxByClass = {};

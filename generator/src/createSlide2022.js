@@ -1,6 +1,6 @@
 import { basename } from "path";
 
-import config from "./config.js";
+import config from "./config_2022.js";
 import { findPrep } from "./extraName.js";
 import { resizeImg } from "./resizeImage.js";
 

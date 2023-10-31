@@ -97,17 +97,12 @@ export async function loadStudents(classes) {
     skip_empty_lines: true,
   });
 
-  let a = true;
-  if (a) {
-    return;
-  }
-
   const ctxByClass = {};
   const allYear6Missing = [];
   const allPrepMissing = [];
   for (let cl of classes) {
     const students = allStudents.filter((s) => s.class === cl);
-    const ctx = await readClass(cl, students);
+    const ctx = await readClass(cl, students, allYear6Files);
     allYear6Missing.push(...ctx.missing_year6);
     allPrepMissing.push(...ctx.missing_prep);
     ctxByClass[cl] = ctx;
@@ -128,62 +123,39 @@ export async function loadStudents(classes) {
   return ctxByClass;
 }
 
-async function readClass(cl, students) {
-  const ctx = { year: cl, students, missing_year6: [], missing_prep: [] };
+async function readClass(cl, students, allYear6Files) {
+  const ctx = { year: cl, missing_year6: [], missing_prep: [] };
+  const studentInfos = [];
   for (const s of students) {
-    extractStudentInfo(ctx, s, cl);
+    const info = extractStudentInfo(ctx, s, cl, allYear6Files);
+    studentInfos.push(info);
   }
+  ctx.students = studentInfos;
   return ctx;
 }
 
-function extractStudentInfo(ctx, student, cl) {
-  const info = {};
+function extractStudentInfo(ctx, student, cl, allYear6Files) {
+  const info = { ...student };
   const nameStr = student.fullName;
   const nameParts = nameStr.trim().split(", ");
   if (nameParts.length !== 2) {
     log.error("Invalid student info format", nameStr);
   }
+
   info.lastName = nameParts[0].trim();
   info.firstName = nameParts[1].trim();
+  const k = key(student.fullName);
+  const fileInfos = allYear6Files[k] ?? {};
 
-  const fileName = info.lastName + ", " + info.firstName + ".jpg";
-
-  const path = cl + "\\" + fileName;
-
-  const year6Path = LAYOUT.PHOTOS_FOLDER + path;
-
-  if (fs.existsSync(year6Path)) {
-    info.year6Name = fileName;
-    info.year6Path = year6Path;
+  if (fileInfos.year6) {
+    info.year6 = fileInfos.year6;
   } else {
-    ctx.missing_year6.push(info.lastName + ", " + info.firstName + " " + cl);
+    ctx.missing_year6.push(nameStr + " " + cl);
   }
-
-  let prepExistings = [];
-  let prepFileNameExisting = [];
-  PREP_PHOTOS_FOLDER.forEach((f) => {
-    const prepFileName = info.lastName + ", " + info.firstName + " - P.jpg";
-    const prepPath = f + prepFileName;
-    if (fs.existsSync(prepPath)) {
-      prepExistings.push(prepPath);
-      prepFileNameExisting.push(prepFileName);
-    }
-  });
-
-  if (prepExistings.length === 1) {
-    info.prepPath = prepExistings[0];
-    info.prepFileName = prepFileNameExisting[0];
-  } else if (prepExistings.length > 1) {
-    console.warn(
-      "Multiple prep photo for " +
-        info.lastName +
-        ", " +
-        info.firstName +
-        " " +
-        cl
-    );
+  if (fileInfos.prep) {
+    info.prep = fileInfos.prep;
   } else {
-    ctx.missing_prep.push(info.lastName + ", " + info.firstName + " " + cl);
+    ctx.missing_prep.push(nameStr + " " + cl);
   }
 
   return info;

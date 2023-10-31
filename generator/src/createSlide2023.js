@@ -1,18 +1,23 @@
-import { basename } from "path";
+import { join } from "node:path";
 
 import config from "./config_2023.js";
 import { findPrep } from "./extraName.js";
 import { resizeImg } from "./resizeImage.js";
 
-export async function createSlide2023(fileInfo, pptx) {
-  const photosFolder = config.PHOTOS_FOLDER;
+export async function createSlide2023(studentInfo, pptx) {
+  const fullName = studentInfo.fullName;
 
-  const imgName = fileInfo.year6Path;
-  console.log(`Creating slide for ${imgName}...`);
   const slide = pptx.addSlide({ masterName: "MASTER_SLIDE" });
   //slide.background = { color: "0b0b61" }; // Solid color
 
-  const year6Path = fileInfo.year6Path;
+  const year6Path = studentInfo.year6
+    ? join(studentInfo.year6.dir, studentInfo.year6.base)
+    : null;
+  const prepPath = studentInfo.prep
+    ? join(studentInfo.prep.dir, studentInfo.prep.base)
+    : null;
+
+  console.log(`Creating slide for ${studentInfo.fullName}...`);
 
   let imgData = {};
 
@@ -35,8 +40,7 @@ export async function createSlide2023(fileInfo, pptx) {
   const center1 = slideTotalWidth / centeringFactor;
   const center2 = ((centeringFactor - 1.0) * slideTotalWidth) / centeringFactor;
 
-  if (fileInfo.prepPath) {
-    const prepPath = fileInfo.prepPath;
+  if (prepPath) {
     let prepMetadata = {};
     await resizeImg(prepPath, prepMetadata).then(({ data, info }) => {
       imgData.prepImg = data;
@@ -61,7 +65,7 @@ export async function createSlide2023(fileInfo, pptx) {
       y: config.PPTX_IMAGE_VERTICAL_OFFSET,
       h: prepResizedPptxHeight,
       w: prepResizedPptxWidth,
-      altText: fileInfo.prepFileName,
+      altText: studentInfo.prep.base,
     });
   }
 
@@ -83,13 +87,13 @@ export async function createSlide2023(fileInfo, pptx) {
       y: config.PPTX_IMAGE_VERTICAL_OFFSET,
       h: resizedPptxHeight,
       w: resizedPptxWidth,
-      altText: fileInfo.year6Name,
+      altText: studentInfo.year6.base,
     });
   }
 
-  slide.addText(fileInfo.firstName + " " + fileInfo.lastName, {
+  slide.addText(fullName, {
     placeholder: "name_placeholder",
   });
 
-  console.log(`Created slide for ${imgName}!`);
+  console.log(`Created slide for ${fullName}!`);
 }

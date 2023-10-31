@@ -3,13 +3,13 @@ import { basename, extname } from "path";
 import pptxgen from "pptxgenjs";
 
 import config from "./src/config_2023.js";
-import { createMasterSlide } from "./src/createMasterSlide.js";
+import { createMasterSlide } from "./src/createMasterSlide2023.js";
 import { createSlide2023 } from "./src/createSlide2023.js";
 import { checkMissing, extractNamesInfo } from "./src/extraName.js";
 import { loadStudents } from "./src/loadStudents2023.js";
 
 export default async () => {
-  const genPptx = false;
+  const genPptx = true;
 
   //const years = ["6A", "6B", "6C", "6D", "6E", "6F", "6G", "6H", "6I"];
   const years = ["6A"];
@@ -30,7 +30,7 @@ export default async () => {
 
     for (const student of thisYearInfo.students) {
       nbrSlides++;
-      await createSlide2022(student, pres);
+      await createSlide2023(student, pres);
     }
     pres.writeFile(
       { fileName: `..\\..\\${config.FILENAME_PREFIX}_${year}.pptx` },

@@ -38,7 +38,7 @@ const LAYOUT_16x9 = {
 
 const LAYOUT_A4 = {
   TESTING: testing,
-  LAYOUT: "LAYOUT_A4", //width:11.7, height:8.25
+  LAYOUT: "LAYOUT_4x3", //width:11.7, height:8.25
   FILENAME_PREFIX: "Print",
   IMAGE_RESIZE_HEIGHT: 400,
   PPTX_IMAGE_HEIGHT: 5, //inches total pptx height in LAYOUT_16x9: 10 x 5.625 inches
@@ -53,7 +53,7 @@ const LAYOUT_A4 = {
   TEXT_COLOR: "#1F4E79",
   FONT_SIZE: 28,
   IMAGE_DENSITY: 300, //for print
-  PPTX_NAME_POSITION: { x: 1.5, w: 8.7, y: 6.8, h: 0.75 },
+  PPTX_NAME_POSITION: { x: 1.5, w: 11.75, y: 6.8, h: 0.75 },
   USE_PLACE_HOLDER_FOR_IMAGES: false,
 };
 

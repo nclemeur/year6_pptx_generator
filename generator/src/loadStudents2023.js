@@ -42,18 +42,26 @@ async function loadPhotos(dir, prop) {
   return allFiles;
 }
 
-const expectedMismatch = [
+const expectedPrepMismatch = [
   "abdelhalim,ahmed",
   "chen,lillian",
   "fan,jaden-not_used1",
   "fan,jaden-not_used",
   "gamlakshagedon,nethayanot_used",
+  "huang,yiyi",
+  "liu,mike",
+  "nithyanand,shivaniunused",
+  "park,seawoo",
+  "raj,neil",
+  "wong,hayley",
+  "yoon,dohyun",
 ];
 
 export async function loadStudents(classes) {
   const allYear6Files = await loadPhotos(PHOTOS_FOLDER, "year6");
   const allPrepFiles = {};
   let prepOnly = 0;
+  let displayedErrors = 0;
   for (const prepDir of PREP_PHOTOS_FOLDER) {
     const prepFiles = await loadPhotos(prepDir, "prep");
     for (const [key, value] of Object.entries(prepFiles)) {
@@ -65,9 +73,10 @@ export async function loadStudents(classes) {
       let o = allYear6Files[key];
       if (!o) {
         prepOnly++;
-        if (!expectedMismatch.includes(key)) {
+        if (!expectedPrepMismatch.includes(key)) {
+          displayedErrors++;
           console.log(
-            `${key} + " not found in year 6? ${prepOnly}`,
+            `${key} + " not found in year 6? ${displayedErrors}/${prepOnly}`,
             value.prep
           );
         }

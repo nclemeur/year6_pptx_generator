@@ -24,6 +24,7 @@ export async function createSlide2022(fileInfo, pptx) {
       imgData.img = data;
       imgData.resized_width = info.width;
       imgData.resized_height = info.height;
+      console.log("Resized to ");
     });
   }
 

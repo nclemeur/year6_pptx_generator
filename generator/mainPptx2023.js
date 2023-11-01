@@ -2,17 +2,20 @@ import { readdirSync } from "fs";
 import { basename, extname } from "path";
 import pptxgen from "pptxgenjs";
 
-import config from "./src/config_2023.js";
+import { getConfig, initConfig } from "./src/config_2023.js";
 import { createMasterSlide } from "./src/createMasterSlide2023.js";
 import { createSlide2023 } from "./src/createSlide2023.js";
-import { checkMissing, extractNamesInfo } from "./src/extraName.js";
 import { loadStudents } from "./src/loadStudents2023.js";
 
 export default async () => {
+  const usePrint = false;
+  initConfig(usePrint);
+  const config = getConfig();
+
   const genPptx = true;
 
-  //const years = ["6A", "6B", "6C", "6D", "6E", "6F", "6G", "6H", "6I"];
-  const years = ["6A"];
+  const years = ["6A", "6B", "6C", "6D", "6E", "6F", "6G", "6H", "6I"];
+  //const years = ["6C"];
   const byYearInfo = await loadStudents(years);
 
   if (!genPptx) {

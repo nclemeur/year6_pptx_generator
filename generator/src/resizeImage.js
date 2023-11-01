@@ -1,10 +1,11 @@
 import sharp from "sharp";
-import config from "./config_2022.js";
+import { getConfig } from "./config_2023.js";
 
 export const resizeImg = async (path, metadata) => {
+  const config = getConfig();
   const height = config.IMAGE_RESIZE_HEIGHT;
 
-  const s = sharp(path);
+  const s = sharp(path, { failOnError: false });
 
   await s.metadata().then((met) => {
     Object.assign(metadata, met);
@@ -52,10 +53,6 @@ export const resizeImg = async (path, metadata) => {
     }
 
     let transparentPaddingColor = { r: 255, g: 255, b: 255, alpha: 0 };
-    if (false) {
-      //to debug
-      transparentPaddingColor = { r: 255, g: 0, b: 0, alpha: 1 };
-    }
 
     a.extend({
       top: 0,

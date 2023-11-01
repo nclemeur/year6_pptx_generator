@@ -1,10 +1,11 @@
 import { join } from "node:path";
 
-import config from "./config_2023.js";
+import { getConfig } from "./config_2023.js";
 import { findPrep } from "./extraName.js";
 import { resizeImg } from "./resizeImage.js";
 
 export async function createSlide2023(studentInfo, pptx) {
+  const config = getConfig();
   const fullName = studentInfo.fullName;
 
   const slide = pptx.addSlide({ masterName: "MASTER_SLIDE" });
@@ -22,7 +23,6 @@ export async function createSlide2023(studentInfo, pptx) {
   let imgData = {};
 
   const height = config.IMAGE_RESIZE_HEIGHT;
-  const width = config.IMAGE_RESIZE_HEIGHT;
   let metadata = {};
   if (year6Path) {
     await resizeImg(year6Path, metadata).then(({ data, info }) => {
@@ -56,15 +56,16 @@ export async function createSlide2023(studentInfo, pptx) {
     let prepPlaceholderCfg = {};
     if (config.USE_PLACE_HOLDER_FOR_IMAGES) {
       prepPlaceholderCfg = { placeholder: "prep_image_placeholder" };
+    } else {
     }
     slide.addImage({
       data: "data:image/png;base64," + imgData.prepImg.toString("base64"),
-      type: "contain",
-      ...prepPlaceholderCfg,
+      sizing: { type: "contain" },
       x: center1 - prepResizedPptxWidth / 2,
       y: config.PPTX_IMAGE_VERTICAL_OFFSET,
       h: prepResizedPptxHeight,
       w: prepResizedPptxWidth,
+      ...prepPlaceholderCfg,
       altText: studentInfo.prep.base,
     });
   }
@@ -91,7 +92,7 @@ export async function createSlide2023(studentInfo, pptx) {
     });
   }
 
-  slide.addText(fullName, {
+  slide.addText(`${studentInfo.firstName} ${studentInfo.lastName}`, {
     placeholder: "name_placeholder",
   });
 

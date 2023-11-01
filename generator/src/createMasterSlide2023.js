@@ -1,17 +1,19 @@
-import config from "./config_2023.js";
+import { getConfig } from "./config_2023.js";
 
 export function createMasterSlide(pptx) {
+  const config = getConfig();
   const objects = [
     {
       placeholder: {
         options: {
           name: "name_placeholder",
-          type: "body",
+          type: "title",
           ...config.PPTX_NAME_POSITION,
           color: config.TEXT_COLOR,
           //fill: { color: "0000FF" },
           valign: "middle",
           align: "center",
+          margin: [0, 0, 0, 0.08], //LRBT
           isTextBox: true,
           autoFit: true,
           fontFace: config.FONT_FACE,
@@ -20,16 +22,9 @@ export function createMasterSlide(pptx) {
         },
       },
     },
-    {
-      image: {
-        x: 0,
-        y: 6.4,
-        w: 10,
-        h: 1.5,
-        path: "C:\\Users\\nclemeur.DAESIM\\Documents\\dev\\year6\\2023\\Templates\\Print_Footer.svg",
-      },
-    },
+    ...config.master_images,
   ];
+
   if (config.USE_PLACE_HOLDER_FOR_IMAGES) {
     const slideTotalWidth = config.SLIDE_LAYOUT_WIDTH;
     const centeringFactor = config.IMAGE_CENTERING_FACTOR;

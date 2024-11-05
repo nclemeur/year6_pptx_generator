@@ -1,19 +1,23 @@
-import { readdir } from "node:fs/promises";
+import { readdir, stat } from "node:fs/promises";
 import { join, parse } from "node:path";
 
-const walk = async (dirPath) =>
+const walk = async (dirPath, rec) =>
   Promise.all(
-    await readdir(dirPath, { withFileTypes: true }).then((entries) =>
-      entries.map((entry) => {
+    await readdir(dirPath, { withFileTypes: true }).then(async (entries) =>
+      entries.map(async (entry) => {
         const childPath = join(dirPath, entry.name);
         const info = parse(childPath);
-        return entry.isDirectory() ? walk(childPath) : info;
+        if (!entry.isDirectory()) {
+          const s = await stat(childPath);
+          info.size = s.size;
+        }
+        return rec && entry.isDirectory() ? walk(childPath, rec) : info;
       })
     )
   );
 
-export const findAllFiles = async (dirPath) => {
-  const allFiles = await walk(dirPath);
-
+export const findAllFiles = async (dirPath, recursive) => {
+  const rec = recursive ?? true;
+  const allFiles = await walk(dirPath, rec);
   return allFiles.flat(Number.POSITIVE_INFINITY);
 };

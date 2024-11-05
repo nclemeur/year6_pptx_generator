@@ -6,14 +6,13 @@ import {
   PREP_PHOTOS_FOLDER,
   PHOTOS_FOLDER,
 } from "./config_2023.js";
-import LAYOUT from "./config_2022.js";
 import { parse } from "csv-parse/sync";
 import { findAllFiles } from "./util.js";
 
 export const PHOTOS_FOLDER_MSP =
   "C:\\Users\\nclemeur.DAESIM\\Documents\\dev\\year6\\2023\\2023 Year 6 Graduation\\Year 6 MSP";
 
-function key(name) {
+export function key(name) {
   //name does not include extension, but prossiby suffix - P for preps
   //also removing ' P;
   let str = name.trim().toLowerCase().replaceAll(" ", "");
@@ -55,6 +54,10 @@ const expectedPrepMismatch = [
   "raj,neil",
   "wong,hayley",
   "yoon,dohyun",
+  "abdelhalim,ahmed-p2",
+  "abdeyazdan,mohammad-p2",
+  "ahmed,mohammed-p2",
+  "ahuja,kanushi-p2",
 ];
 
 export async function loadStudents(classes) {
@@ -73,7 +76,13 @@ export async function loadStudents(classes) {
       let o = allYear6Files[key];
       if (!o) {
         prepOnly++;
-        if (!expectedPrepMismatch.includes(key)) {
+        if (
+          !key.endsWith("-p2") &&
+          !key.endsWith("-p0") &&
+          !key.endsWith("-punused") &&
+          !key.endsWith("-p3") &&
+          !expectedPrepMismatch.includes(key)
+        ) {
           displayedErrors++;
           console.log(
             `${key} + " not found in year 6? ${displayedErrors}/${prepOnly}`,
@@ -109,16 +118,21 @@ export async function loadStudents(classes) {
   }
 
   allYear6Missing.sort();
-  console.log(
-    "====== Missing year 6 photos: " + allYear6Missing.length + " ===== "
-  );
-  allYear6Missing.forEach((s) => console.log(s));
+  let missingInfo =
+    "====== Missing year 6 photos: " + allYear6Missing.length + " ===== ";
+
+  allYear6Missing.forEach((s) => (missingInfo += "\r\n" + s));
 
   allPrepMissing.sort();
-  console.log(
-    "====== Missing prep photos: " + allPrepMissing.length + " ===== "
-  );
-  allPrepMissing.forEach((s) => console.log(s));
+  missingInfo +=
+    "\r\n====== Missing prep photos: " + allPrepMissing.length + " ===== ";
+  allPrepMissing.forEach((s) => (missingInfo += "\r\n" + s));
+
+  try {
+    await fs.writeFile("..\\..\\missing.txt", missingInfo);
+  } catch (err) {
+    console.error(err);
+  }
 
   return ctxByClass;
 }

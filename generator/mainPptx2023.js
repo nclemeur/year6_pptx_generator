@@ -8,7 +8,7 @@ import { createSlide2023 } from "./src/createSlide2023.js";
 import { loadStudents } from "./src/loadStudents2023.js";
 
 export default async () => {
-  const usePrint = false;
+  const usePrint = true;
   initConfig(usePrint);
   const config = getConfig();
 

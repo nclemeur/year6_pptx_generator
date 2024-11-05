@@ -1,7 +1,6 @@
 import { join } from "node:path";
 
 import { getConfig } from "./config_2023.js";
-import { findPrep } from "./extraName.js";
 import { resizeImg } from "./resizeImage.js";
 
 export async function createSlide2023(studentInfo, pptx) {
@@ -18,7 +17,7 @@ export async function createSlide2023(studentInfo, pptx) {
     ? join(studentInfo.prep.dir, studentInfo.prep.base)
     : null;
 
-  console.log(`Creating slide for ${studentInfo.fullName}...`);
+  //console.log(`Creating slide for ${studentInfo.fullName}...`);
 
   let imgData = {};
 
@@ -96,5 +95,5 @@ export async function createSlide2023(studentInfo, pptx) {
     placeholder: "name_placeholder",
   });
 
-  console.log(`Created slide for ${fullName}!`);
+  //console.log(`Created slide for ${fullName}!`);
 }
